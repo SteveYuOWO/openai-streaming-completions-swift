@@ -9,7 +9,11 @@ public struct OpenAIAPI {
         self.apiKey = apiKey
         self.orgId = orgId
         if let origin = origin {
-            self.origin = origin
+            if origin.hasSuffix("/") {
+                self.origin = String(origin.dropLast())
+            } else {
+                self.origin = origin
+            }
         }
     }
 }
