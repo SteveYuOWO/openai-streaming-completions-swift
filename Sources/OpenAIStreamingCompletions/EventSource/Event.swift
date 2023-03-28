@@ -82,22 +82,8 @@ private extension Event {
     }
 
     static func parseLine(_ line: String, newLineCharacters: [String]) -> (key: String?, value: String?) {
-        var key: NSString?, value: NSString?
-        let scanner = Scanner(string: line)
-        scanner.scanUpTo(":", into: &key)
-        scanner.scanString(":", into: nil)
-
-        for newline in newLineCharacters {
-            if scanner.scanUpTo(newline, into: &value) {
-                break
-            }
-        }
-
-        // for id and data if they come empty they should return an empty string value.
-        if key != "event" && value == nil {
-            value = ""
-        }
-
-        return (key as String?, value as String?)
+        let components = line.components(separatedBy: ":")
+        guard components.count > 1 else {return (nil, nil)}
+        return (components[0].trimmingCharacters(in: .whitespacesAndNewlines), components.dropFirst().joined(separator: ":").trimmingCharacters(in: .whitespacesAndNewlines))
     }
 }
